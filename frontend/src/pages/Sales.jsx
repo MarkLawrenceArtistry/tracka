@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from '../contexts/AuthContext'
-import { useNavigate, Link } from 'react-router-dom'
-import { createSale, deleteSale, getAllSales } from '../services/salesService'
+import { useNavigate, Link, useAsyncError } from 'react-router-dom'
+import { createSale, getSale, updateSale, deleteSale, getAllSales } from '../services/salesService'
 
 export default function Sales() {
     const { logoutSession, user } = useAuth()
@@ -10,6 +10,8 @@ export default function Sales() {
     const [salesList, setSalesList] = useState([])
     const [sale, setSale] = useState({user_id: '', amount: '', description: '', date: ''})
     const [loading, setLoading] = useState(true)
+    const [title, setTitle] = useState("Add New Sale")
+    const [currentSaleID, setCurrentSaleID] = useState(null)
 
     useEffect(() => {
         fetchSales()
@@ -36,20 +38,33 @@ export default function Sales() {
         e.preventDefault()
 
         try {
-            const newSaleData = {
+            const saleData = {
                 user_id: user.id,
                 amount: sale.amount,
                 description: sale.description,
                 date: sale.date
             }
 
-            const response = await createSale(newSaleData)
+            if(!currentSaleID) {
+                const response = await createSale(saleData)
 
-            if(response.success) {
-                alert("Sale created successfully")
+                if(response.success) {
+                    alert("Sale created successfully")
 
-                setSale(newSaleData)
-                fetchSales()
+                    setSale({user_id: '', amount: '', description: '', date: ''})
+                    fetchSales()
+                }
+            } else {
+                const response = await updateSale(saleData, currentSaleID)
+
+                if(response.success) {
+                    alert("Sale updated successfully")
+
+                    setCurrentSaleID(null)
+                    setTitle("Add New Sale")
+                    setSale({user_id: '', amount: '', description: '', date: ''})
+                    fetchSales()
+                }
             }
         } catch(err) {
             console.error(`Error creating sale: ${err.message}`)
@@ -81,7 +96,21 @@ export default function Sales() {
     }
     
     const handleUpdate = async (sale_id) => {
-        
+        try {
+            // 1. kunin yung existing sale
+            // 2. ilapat yung existing sale sa fields ng form
+            // 3. update yung title ng form
+            // 4. update yung state kung "editing" state, IF OO ang sale service function call `updateSale()` if not `createSale()`
+
+            const saleResponse = await getSale(sale_id)
+            setSale({amount: saleResponse.data.amount, description: saleResponse.data.description, date: saleResponse.data.date})
+            setCurrentSaleID(sale_id)
+            setTitle("Update Sale")
+
+        } catch(err) {
+            console.error(`Error updating sale: ${err.message}`)
+            alert(`Failed to update sale!`)
+        }
     }
 
     if(loading) return <p>Loading sales data...</p>
@@ -91,7 +120,7 @@ export default function Sales() {
             <h1>Manage Sales</h1>
 
             <form onSubmit={handleSubmit}>
-                <h3>Add New Sale</h3>
+                <h3>{title}</h3>
 
                 <div>
                     <label>Amount: </label> <br />

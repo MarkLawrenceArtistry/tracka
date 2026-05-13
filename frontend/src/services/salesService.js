@@ -10,8 +10,13 @@ export const updateSale = async (data, sale_id) => {
     return response.data
 }
 
+export const getSale = async (sale_id) => {
+    const response = await api.get(`/sales/${sale_id}`)
+    return response.data
+}
+
 export const getAllSales = async (user_id) => {
-    const response = await api.get(`/sales/${user_id}`)
+    const response = await api.get(`/sales/user/${user_id}`)
     return response.data
 }
 

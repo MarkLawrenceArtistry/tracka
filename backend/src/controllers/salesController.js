@@ -15,7 +15,34 @@ const getAllSales = async (req, res) => {
 
         const result = await all(query, params)
 
-        res.status(200).json({success:true,message:"Fetched all sak=les successfully.",data:result})
+        res.status(200).json({success:true,message:"Fetched all sales successfully.",data:result})
+    } catch(err) {
+        res.status(500).json({ success: false, message: `Internal server error: ${err.message}` });
+    }
+}
+
+const getSale = async (req, res) => {
+    try {
+        const { sale_id } = req.params
+        let user_id = req.user.id
+
+        // Check if user exists
+        const user = await get(`SELECT * FROM users WHERE id = ?`, [user_id]);
+        
+        if (!user) {
+            return res.status(401).json({ success: false, message: "Invalid user." });
+        }
+
+        const query = `
+            SELECT id, amount, description, date FROM sales
+            WHERE id = ? AND user_id = ?
+        `
+
+        const params = [sale_id, user_id]
+
+        const result = await get(query, params)
+
+        res.status(200).json({success:true,message:"Fetched sale successfully.",data:result})
     } catch(err) {
         res.status(500).json({ success: false, message: `Internal server error: ${err.message}` });
     }
@@ -62,14 +89,14 @@ const updateSale = async (req, res) => {
     try {
 
         let { user_id, amount, description, date } = req.body
-        const { id } = req.params // sale id
+        const { sale_id } = req.params // sale id
 
         amount = Number(amount)
         if(amount < 1) {
             return res.status(400).json({success:false,message:"Amount cannot be negative."})
         }
 
-        const user = await get('SELECT FROM * users WHERE id = ?', [user_id])
+        const user = await get('SELECT * FROM users WHERE id = ?', [user_id])
 
         if(!user) {
             return res.status(401).json({success:false,message:"Invalid user."})
@@ -85,7 +112,7 @@ const updateSale = async (req, res) => {
             WHERE id = ?
         `
 
-        const params = [user_id, amount, description, date, id]
+        const params = [user_id, amount, description, date, sale_id]
 
         const result = await run(query, params)
         res.status(200).json({success:true,message:"Sale updated successfully."})
@@ -163,4 +190,4 @@ const dashboardKpi = async (req, res) => {
     }
 }
 
-module.exports = { getAllSales, createSale, updateSale, deleteSale, dashboardKpi }
+module.exports = { getAllSales, getSale, createSale, updateSale, deleteSale, dashboardKpi }
