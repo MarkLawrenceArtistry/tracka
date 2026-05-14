@@ -3,6 +3,8 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigate, Link, useAsyncError } from 'react-router-dom'
 import { createSale, getSale, updateSale, deleteSale, getAllSales } from '../services/salesService'
 
+import logo from '../assets/logo.png';
+
 export default function Sales() {
     const { logoutSession, user } = useAuth()
     const navigate = useNavigate()
@@ -116,90 +118,110 @@ export default function Sales() {
     if(loading) return <p>Loading sales data...</p>
 
     return (
-        <div>
-            <h1>Manage Sales</h1>
-
-            <form onSubmit={handleSubmit}>
-                <h3>{title}</h3>
-
-                <div>
-                    <label>Amount: </label> <br />
-                    <input
-                        type="number"
-                        min={1}
-                        placeholder="e.g. 150"
-                        value={sale.amount}
-                        onChange={(e) => setSale({...sale, amount: e.target.value})}
-                        required
-                    />
+        <div className="sales-div">
+            <div className="sidebar">
+                <div className="sidebar-header">
+                    <img src={logo} className="logo" />
+                    <h1>Tracka</h1>
                 </div>
-
-                <br />
-
-                <div>
-                    <label>Description: </label> <br />
-                    <input
-                        type="text"
-                        placeholder="e.g. Sold a laptop"
-                        value={sale.description}
-                        onChange={(e) => setSale({...sale, description: e.target.value})}
-                        required
-                    />
+                <div className="sidebar-nav">
+                    <Link to="/sales">
+                        <li className="nav-item">Sales</li>
+                    </Link>
+                    <Link to="/dashboard">
+                        <li className="nav-item">Dashboard</li>
+                    </Link>
                 </div>
-
-                <br />
-                
-                <div>
-                    <label>Date: </label> <br />
-                    <input
-                        type="text"
-                        placeholder="e.g. 5/14/2026"
-                        value={sale.date}
-                        onChange={(e) => setSale({...sale, date: e.target.value})}
-                        required
-                    />
+                <div className="sidebar-footer">
+                    <button onClick={handleLogout}>Logout</button>
                 </div>
+            </div>
 
-                <button type="submit">Submit</button>
-            </form>
+            <div className="content">
+                <h1>Manage Sales</h1>
 
-            <hr />
+                <form onSubmit={handleSubmit}>
+                    <h3>{title}</h3>
 
-            <h3>Sales History</h3>
-            <table border={1} cellPadding={10} style={{ width: "100%", borderCollapse: 'collapse' }}>
-                <thead>
-                    <tr style={{ background: '#eee' }}>
-                        <th>ID</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {salesList.length === 0 ? (
-                        <tr colSpan="4" style={{ textAlign: 'center' }}>
-                            <td>No sales found. Add one above!</td>
+                    <div>
+                        <label>Amount: </label> <br />
+                        <input
+                            type="number"
+                            min={1}
+                            placeholder="e.g. 150"
+                            value={sale.amount}
+                            onChange={(e) => setSale({...sale, amount: e.target.value})}
+                            required
+                        />
+                    </div>
+
+                    <br />
+
+                    <div>
+                        <label>Description: </label> <br />
+                        <input
+                            type="text"
+                            placeholder="e.g. Sold a laptop"
+                            value={sale.description}
+                            onChange={(e) => setSale({...sale, description: e.target.value})}
+                            required
+                        />
+                    </div>
+
+                    <br />
+                    
+                    <div>
+                        <label>Date: </label> <br />
+                        <input
+                            type="text"
+                            placeholder="e.g. 5/14/2026"
+                            value={sale.date}
+                            onChange={(e) => setSale({...sale, date: e.target.value})}
+                            required
+                        />
+                    </div>
+
+                    <button type="submit">Submit</button>
+                </form>
+
+                <hr />
+
+                <h3>Sales History</h3>
+                <table border={1} cellPadding={10} style={{ width: "100%", borderCollapse: 'collapse' }}>
+                    <thead>
+                        <tr style={{ background: '#eee' }}>
+                            <th>ID</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Actions</th>
                         </tr>
-                    ) : (
-                        salesList.map((sale) => (
-                            <tr key={sale.id}>
-                                <td>{sale.id}</td>
-                                <td>{sale.amount}</td>
-                                <td>{sale.description}</td>
-                                <td>{sale.date}</td>
-                                <td>
-                                    <button onClick={() => handleUpdate(sale.id)}>Update</button>
-                                    <button onClick={() => handleDelete(sale.id)}>Delete</button>
-                                </td>
+                    </thead>
+                    <tbody>
+                        {salesList.length === 0 ? (
+                            <tr colSpan="4" style={{ textAlign: 'center' }}>
+                                <td>No sales found. Add one above!</td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                        ) : (
+                            salesList.map((sale) => (
+                                <tr key={sale.id}>
+                                    <td>{sale.id}</td>
+                                    <td>{sale.amount}</td>
+                                    <td>{sale.description}</td>
+                                    <td>{sale.date}</td>
+                                    <td>
+                                        <button onClick={() => handleUpdate(sale.id)}>Update</button>
+                                        <button onClick={() => handleDelete(sale.id)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
 
-            <button onClick={() => navigate('/dashboard')}>Go to Dashboard</button>
-            <button onClick={handleLogout}>Logout</button>
+                <button onClick={() => navigate('/dashboard')}>Go to Dashboard</button>
+                <button onClick={handleLogout}>Logout</button>
+            </div>
         </div>
     )
 }

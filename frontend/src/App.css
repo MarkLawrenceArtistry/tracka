@@ -1,6 +1,8 @@
-/* * {
-    border: 1px solid red;
-} */
+* {
+    margin: 0;
+    padding: 0;
+    /* border: 1px solid red; */
+}
 
 
 /* LOGIN */
@@ -64,4 +66,70 @@
     width: 100%;
     margin-top: 5px;
     border: none;
+}
+
+
+
+
+
+/* DASHBOARD */
+.dashboard-div, .sales-div {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar, .content {
+    padding: 20px;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f6f7f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+    flex: 1;
+}
+
+.sidebar-nav a {
+    text-decoration: none;
+    color: #171717;
+}
+
+.nav-item {
+    padding: 10px;
+    border: 1px solid #171717;
+    border-radius: 3px;
+}
+
+.nav-item:hover {
+    background-color: #bdbcbc;
+}
+
+.sidebar-footer {
+    display: flex;
+}
+
+.sidebar-footer button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #171717;
+    color: white;
+}
+
+.content {
+    flex: 1;
 }
