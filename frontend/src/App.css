@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    /* border: 1px solid red; */
+    
 }
 
 
@@ -87,6 +87,8 @@
     background-color: #f6f7f9;
     display: flex;
     flex-direction: column;
+    max-height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar-header {
@@ -142,6 +144,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    max-height: 100vh;
 }
 
 .content-body {
@@ -188,6 +191,9 @@
 /* SALES PAGE */
 .sales-content-body {
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .sales-content-body h3 {
@@ -268,8 +274,9 @@
 
 /* SALES TABLE */
 .sales-table-wrapper {
-    width: 100%;
     margin-top: 15px;
+    overflow-y: auto;
+    height: 500px;
 }
 
 .sales-table {

@@ -163,7 +163,11 @@ const dashboardKpi = async (req, res) => {
         }
 
         const totalSales = await get(`SELECT SUM(amount) FROM sales WHERE user_id = ?`, [user_id])
-        const totalAvgSales = await get(`SELECT AVG(amount) FROM sales WHERE user_id = ?`, [user_id])
+        const result = await get(`SELECT AVG(amount) AS avgSales FROM sales WHERE user_id = ?`, [user_id]);
+
+        // aralin mo to 
+        // Optional Chaining (?.) and the Nullish Coalescing Operator (??)
+        const totalAvgSales = Number(result?.avgSales ?? 0).toFixed(2);
 
         // total sales this month calculation
         const now = new Date();
@@ -175,13 +179,14 @@ const dashboardKpi = async (req, res) => {
             WHERE (date LIKE ? OR date LIKE ?) AND user_id = ?
         `;
         const totalSalesThisMonth = await get(queryThisMonth, [`${monthPart}%`, `${yearPart}%`, user_id]);
+        const average = totalAvgSales
 
         res.status(200).json({
             success:true,
             message:"Dashboard KPIs fetched successfully.",
             data:{
                 totalSales: totalSales,
-                totalAvgSales: totalAvgSales,
+                totalAvgSales: average,
                 totalSalesThisMonth: totalSalesThisMonth,
             }})
     } catch(err) {

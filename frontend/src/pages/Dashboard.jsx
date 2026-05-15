@@ -72,20 +72,20 @@ export default function Dashboard() {
                     <div className="kpi-wrapper">
                         <div className="kpi-card">
                             <p>Total Sales</p>
-                            <h3>₱{kpi.totalSales["SUM(amount)"] === null ? 0 : kpi.totalSales["SUM(amount)"]}</h3>
+                            <h3>₱{kpi.totalSales["SUM(amount)"] === null ? 0 : kpi.totalSales["SUM(amount)"].toLocaleString('en-US')}</h3>
                             <p className="kpi-card-description">Total number of sales.</p>
                         </div>
 
                         <div className="kpi-card">
                             <p>Average Sale</p>
-                            <h3>₱{kpi.totalAvgSales['AVG(amount)'] === null ? 0 : kpi.totalAvgSales['AVG(amount)']}</h3>
+                            <h3>₱{kpi.totalAvgSales === null ? 0 : kpi.totalAvgSales.toLocaleString('en-US')}</h3>
                             <p className="kpi-card-description">Total average of all sales.</p>
                         </div>
 
                         <div className="kpi-card">
                             <p>This Month</p>
                             
-                            <h3>₱{kpi.totalSalesThisMonth.total === null ? 0 : kpi.totalSalesThisMonth.total}</h3>
+                            <h3>₱{kpi.totalSalesThisMonth.total === null ? 0 : kpi.totalSalesThisMonth.total.toLocaleString('en-US')}</h3>
                             <p className="kpi-card-description">Total number of sales done by this month.</p>
                         </div>
                     </div>
