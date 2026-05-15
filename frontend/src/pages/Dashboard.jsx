@@ -4,6 +4,8 @@ import { useNavigate, Link } from "react-router-dom"
 import { getDashboardKpi } from "../services/salesService"
 
 import logo from '../assets/logo.png';
+import dashboard from '../assets/dashboard.png';
+import sales from '../assets/sales.png';
 
 export default function Dashboard() {
     const { logoutSession, user } = useAuth()
@@ -44,11 +46,17 @@ export default function Dashboard() {
                     <h1>Tracka</h1>
                 </div>
                 <div className="sidebar-nav">
-                    <Link to="/sales">
-                        <li className="nav-item">Sales</li>
-                    </Link>
                     <Link to="/dashboard">
-                        <li className="nav-item">Dashboard</li>
+                        <div className="nav-item">
+                            <img src={dashboard} className="" />
+                            <li>Dashboard</li>
+                        </div>
+                    </Link>
+                    <Link to="/sales">
+                        <div className="nav-item">
+                            <img src={sales} className="" />
+                            <li>Sales</li>
+                        </div>
                     </Link>
                 </div>
                 <div className="sidebar-footer">
@@ -56,25 +64,31 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className="content">
-                <h1>Dashboard</h1>
+                <div className="content-header">
+                    <h1>Dashboard</h1>
+                </div>
 
-                <div style={{ display: 'flex', gap: "20px", marginTop: '20px' }}>
+                <div className="content-body">
+                    <div className="kpi-wrapper">
+                        <div className="kpi-card">
+                            <p>Total Sales</p>
+                            <h3>₱{kpi.totalSales["SUM(amount)"] === null ? 0 : kpi.totalSales["SUM(amount)"]}</h3>
+                            <p className="kpi-card-description">Total number of sales.</p>
+                        </div>
 
-                    <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px' }}>
-                        <h3>Total Sales</h3>
-                        <p>{kpi.totalSales["SUM(amount)"]}</p>
+                        <div className="kpi-card">
+                            <p>Average Sale</p>
+                            <h3>₱{kpi.totalAvgSales['AVG(amount)'] === null ? 0 : kpi.totalAvgSales['AVG(amount)']}</h3>
+                            <p className="kpi-card-description">Total average of all sales.</p>
+                        </div>
+
+                        <div className="kpi-card">
+                            <p>This Month</p>
+                            
+                            <h3>₱{kpi.totalSalesThisMonth.total === null ? 0 : kpi.totalSalesThisMonth.total}</h3>
+                            <p className="kpi-card-description">Total number of sales done by this month.</p>
+                        </div>
                     </div>
-
-                    <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px' }}>
-                        <h3>Average Sale</h3>
-                        <p>{kpi.totalAvgSales['AVG(amount)']}</p>
-                    </div>
-
-                    <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px' }}>
-                        <h3>This Month</h3>
-                        <p>{kpi.totalSalesThisMonth.total ? kpi.totalSalesThisMonth.total : 0}</p>
-                    </div>
-
                 </div>
             </div>
         </div>

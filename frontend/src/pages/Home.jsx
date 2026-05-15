@@ -6,12 +6,23 @@ export default function Home() {
         navigate('/login')
     }
 
-    return (
-        <div>
-            <h1>Welcome</h1>
+    const handleClickRegister = () => {
+        navigate('/register')
+    }
 
-            <p>Press the button to login</p>
-            <button onClick={handleClick}>Sign In</button>
+    return (
+        <div className="homepage-div">
+            <div>
+                <div className="header">
+                    <h1>Welcome</h1>
+                    <p>Press the button to login</p>
+                </div>
+
+                <div className="buttons">
+                    <button onClick={handleClick}>Sign In</button>
+                    <button onClick={handleClickRegister}>Register</button>
+                </div>
+            </div>
         </div>
     )
 }
