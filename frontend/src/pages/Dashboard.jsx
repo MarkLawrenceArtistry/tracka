@@ -38,6 +38,52 @@ export default function Dashboard() {
     if(loading) return <p>Loading...</p>
     console.log(kpi)
 
+    let highestMonth = kpi.highestSalesPeriod.month
+    let currentYear = new Date().getFullYear();
+    if(highestMonth === null) {
+        highestMonth = 'None yet';
+    } else {
+        let firstChar = highestMonth.slice(0, 1);
+        switch(firstChar) {
+            case `1`:
+                highestMonth = `January ${currentYear}`
+                break;
+            case `2`:
+                highestMonth = `February ${currentYear}`
+                break;
+            case `3`:
+                highestMonth = `March ${currentYear}`
+                break;
+            case `4`:
+                highestMonth = `April ${currentYear}`
+                break;
+            case `5`:
+                highestMonth = `May ${currentYear}`
+                break;
+            case `6`:
+                highestMonth = `June ${currentYear}`
+                break;
+            case `7`:
+                highestMonth = `July ${currentYear}`
+                break;
+            case `8`:
+                highestMonth = `August ${currentYear}`
+                break;
+            case `9`:
+                highestMonth = `September ${currentYear}`
+                break;
+            case `10`:
+                highestMonth = `October ${currentYear}`
+                break;
+            case `11`:
+                highestMonth = `November ${currentYear}`
+                break;
+            case `12`:
+                highestMonth = `December ${currentYear}`
+                break;
+        }
+    }
+
     return (
         <div className="dashboard-div">
             <div className="sidebar">
@@ -89,6 +135,14 @@ export default function Dashboard() {
                             <p className="kpi-card-description">Total number of sales done by this month.</p>
                         </div>
                     </div>
+
+                    <div className="kpi-card">
+                            <p>Month with Highest Sales</p>
+                            
+                            <h5>{highestMonth}</h5>
+                            <h3>₱{kpi.highestSalesPeriod.total === null ? 'None yet' : kpi.highestSalesPeriod.total.toLocaleString('en-US')}</h3>
+                            <p className="kpi-card-description">Total number of sales from the month with the highest sales.</p>
+                        </div>
                 </div>
             </div>
         </div>

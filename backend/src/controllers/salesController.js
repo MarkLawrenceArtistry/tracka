@@ -181,6 +181,22 @@ const dashboardKpi = async (req, res) => {
         const totalSalesThisMonth = await get(queryThisMonth, [`${monthPart}%`, `${yearPart}%`, user_id]);
         const average = totalAvgSales
 
+        // month with highest sales
+        const highestMonthQuery = `
+            SELECT 
+                -- Extract the Month (everything before the first '/') 
+                -- and combine it with the Year (everything after the second '/')
+                (SUBSTR(date, 1, INSTR(date, '/') - 1) || '/' || SUBSTR(date, INSTR(date, '/') + 1 + INSTR(SUBSTR(date, INSTR(date, '/') + 1), '/'))) AS peakMonth,
+                SUM(amount) AS highestSales
+            FROM sales
+            WHERE user_id = ?
+            GROUP BY peakMonth
+            ORDER BY highestSales DESC
+            LIMIT 1
+        `;
+        
+        const peakMonthResult = await get(highestMonthQuery, [user_id]);
+
         res.status(200).json({
             success:true,
             message:"Dashboard KPIs fetched successfully.",
@@ -188,6 +204,10 @@ const dashboardKpi = async (req, res) => {
                 totalSales: totalSales,
                 totalAvgSales: average,
                 totalSalesThisMonth: totalSalesThisMonth,
+                highestSalesPeriod: {
+                    month: peakMonthResult?.peakMonth ?? "N/A",
+                    total: peakMonthResult?.highestSales ?? 0
+                }
             }})
     } catch(err) {
         res.status(500).json({ success: false, message: `Internal server error: ${err.message}` });
